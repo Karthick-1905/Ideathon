@@ -21,7 +21,6 @@ const withValidationResult = (validationValue) =>{
 
 const validateRegisterInput = withValidationResult([
     body('username').notEmpty().withMessage('name is required'),
-    body("fullName").notEmpty().withMessage('fullname is required'),
     body('email').notEmpty().withMessage('email is required').
     isEmail().withMessage("Please provide a valid email").
     custom(async(email)=>{

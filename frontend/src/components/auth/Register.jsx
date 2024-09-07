@@ -7,6 +7,8 @@ import {toast} from 'react-hot-toast'
 
 const Register = () => {
   
+
+  //setting register field states
   const fieldState = {};
   useEffect(()=>{
     registerFields.forEach(field => fieldState[field.name] = '') 
@@ -15,10 +17,14 @@ const Register = () => {
     const handleChange = (e) =>{
       setRegisterState({...registerState,[e.target.name]:e.target.value})
     }
+
+    //setting The query
     const queryClient = useQueryClient();
     const {mutate:registerAction,isLoading}  = useMutation({
       mutationFn:async()=>{
-          const {data} = await axios.post('/api/v1/auth/register',{...registerState.filter(state=>state != 'confirm-password')})
+        console.log("Registering The user")
+        const { ['confirm-password']: omit, ...dataToSend } = registerState;
+          const {data} = await axios.post('/api/v1/auth/register',dataToSend)
           console.log(data);
           return data.msg;
       },
@@ -32,7 +38,7 @@ const Register = () => {
     })
 
     const handleSubmit = (e) =>{
-      e.preventdeafult();
+      e.preventDefault();
       registerAction();
     }
 

@@ -23,7 +23,7 @@ if(NODE_ENV === 'development'){
 app.use(express.json())
 app.use(cookieParser())
 
-app.use("/api/v1/routes",authProvider,routesRouter)
+app.use("/api/v1/routes",routesRouter)
 app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/user",authProvider,userRouter)
 app.use(errorHandler);

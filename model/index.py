@@ -15,54 +15,48 @@ np.random.seed(42)
 tf.random.set_seed(42)
 
 
-# Load dataset
 df = pd.read_csv('./dataset/crime.csv', encoding='ISO-8859-1')
 of_df = pd.read_csv('./dataset/offense_codes.csv')
 df = df.dropna()
 
-# Determine severity (custom logic remains the same)
 def determine_severity(row):
     offense_type = row['offense_category_id']
     victim_count = row['victim_count']
     if offense_type in ['murder', 'sexual-assault']:
-        return 3  # High severity
+        return 3  
     elif offense_type in ['aggravated-assault', 'robbery', 'auto-theft']: 
-        return 3 if victim_count > 3 else 2  # Medium or High severity
+        return 3 if victim_count > 3 else 2  
     elif offense_type in ['burglary', 'theft-from-motor-vehicle', 'larceny']:
-        return 2 if victim_count > 2 else 1  # Low or Medium severity
+        return 2 if victim_count > 2 else 1  
     elif offense_type in ['all-other-crimes', 'drug-alcohol', 'other-crimes-against-persons']:
-        return 1 if victim_count > 1 else 0  # Low or Very Low severity
+        return 1 if victim_count > 1 else 0  
     elif offense_type in ['white-collar-crime', 'public-disorder']:
-        return 0  # Very Low severity
+        return 0 
     elif offense_type == 'arson':
-        return 2 if victim_count > 2 else 1  # Medium or Low severity
+        return 2 if victim_count > 2 else 1 
     else:
-        return -1  # Unknown severity
+        return -1  
 
 df['severity'] = df.apply(determine_severity, axis=1)
 
-# Label encoding for categorical feature 'offense_category_id'
 le = LabelEncoder()
 df['offense_category_id'] = le.fit_transform(df['offense_category_id'])
 
-# Additional Feature Engineering (Extracting day of the week)
 df['first_occurrence_date'] = pd.to_datetime(df['first_occurrence_date'], format="%m/%d/%Y %I:%M:%S %p", errors='coerce')
 df['day_of_week'] = df['first_occurrence_date'].dt.dayofweek
 
-# Feature set
 features = ['geo_lon', 'geo_lat', 'offense_category_id', 'victim_count']
 X = df[features]
 y = df['severity']
 
-# Handle class imbalance using SMOTE
+
 smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X, y)
 
-# Feature scaling
+
 scaler = StandardScaler()
 X_resampled = scaler.fit_transform(X_resampled)
 
-# Split the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3, random_state=42)
 
 # Convert labels to categorical (one-hot encoding)

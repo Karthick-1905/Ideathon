@@ -1,17 +1,9 @@
-const axios =  require('axios');
+const axios = require('axios');
 
-
-const dummyMLData = {
-    "Route1": { severity: 0.9, details: "High crime area" },
-    "Route2": { severity: 0.4, details: "Low crime area" }
-  };
-  
-// Function to get routes from OSM API
-  
 async function getRoutesFromOSM(start, end) {
   try {
     const response = await axios.get(
-      `https://router.project-osrm.org/route/v1/driving/${start.lon},${start.lat};${end.lon},${end.lat}`, 
+      `https://router.project-osrm.org/route/v1/driving/${start.lon},${start.lat};${end.lon},${end.lat}`,
       {
         params: {
           overview: 'full',
@@ -21,12 +13,12 @@ async function getRoutesFromOSM(start, end) {
         }
       }
     );
-    console.log(response.data);
+    
     const routes = response.data.routes.map((route, index) => ({
       routeName: `Route${index + 1}`,
       coordinates: route.geometry.coordinates,
     }));
-    console.log(routes)
+
     return routes;
   } catch (error) {
     console.error('Error fetching routes from OSM API:', error.response ? error.response.data : error.message);
@@ -34,7 +26,16 @@ async function getRoutesFromOSM(start, end) {
   }
 }
 
-// API endpoint to get routes with severity
+async function getSeverityFromMLModel(coordinates) {
+  try {
+    const response = await axios.post('http://localhost:5000/predict', { features: coordinates });
+    return response.data.severity; 
+  } catch (error) {
+    console.error('Error fetching severity from ML model:', error.response ? error.response.data : error.message);
+    return Math.random();
+  }
+}
+
 const getRoutes = async (req, res) => {
   const { start, end } = req.body;
 
@@ -44,13 +45,14 @@ const getRoutes = async (req, res) => {
 
   try {
     const routes = await getRoutesFromOSM(start, end);
-
-    // Map the routes to include severity from the dummy ML data
-    const routesWithSeverity = routes.map(route => ({
-      routeName: route.routeName,
-      coordinates: route.coordinates,
-      severity: dummyMLData[route.routeName]?.severity || Math.random(), // Use ML data or random for demo
-      details: dummyMLData[route.routeName]?.details || "No data available"
+    const routesWithSeverity = await Promise.all(routes.map(async (route) => {
+      const severity = await getSeverityFromMLModel(route.coordinates);
+      return {
+        routeName: route.routeName,
+        coordinates: route.coordinates,
+        severity,
+        details: severity > 0.7 ? "High crime area" : "Low crime area"
+      };
     }));
 
     res.json({ routes: routesWithSeverity });
@@ -58,4 +60,5 @@ const getRoutes = async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 };
-module.exports = {getRoutes}
+
+module.exports = { getRoutes };

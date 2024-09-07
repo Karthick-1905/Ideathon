@@ -24,7 +24,7 @@ function App() {
       <Route path='/' element={<MainLayout authUser={authUser}/>}>
         <Route index element={!authUser ?  <Login/> : <Navigate to='/maps'/>}/>
         <Route path='register' element={!authUser ? <Register/>: <Navigate to='/maps'/>}/>
-        <Route path='maps' element={authUser ? <MapLayout/>: <Navigate to='/'/>}></Route>
+        <Route path='maps' element={<MapLayout/>}></Route>
       </Route>
     )
   )
