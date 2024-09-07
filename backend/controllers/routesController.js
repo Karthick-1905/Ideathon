@@ -10,23 +10,26 @@ const dummyMLData = {
   
 async function getRoutesFromOSM(start, end) {
   try {
-    const response = await axios.get('https://router.project-osrm.org/route/v1/driving/', {
-      params: {
-        overview: 'full',
-        geometries: 'geojson',
-        alternatives: true,
-        steps: false,
-        coordinates: `${start.lon},${start.lat};${end.lon},${end.lat}`
+    const response = await axios.get(
+      `https://router.project-osrm.org/route/v1/driving/${start.lon},${start.lat};${end.lon},${end.lat}`, 
+      {
+        params: {
+          overview: 'full',
+          geometries: 'geojson',
+          alternatives: true,
+          steps: false,
+        }
       }
-    });
-    console.log(response);
+    );
+    console.log(response.data);
     const routes = response.data.routes.map((route, index) => ({
       routeName: `Route${index + 1}`,
       coordinates: route.geometry.coordinates,
     }));
-
+    console.log(routes)
     return routes;
   } catch (error) {
+    console.error('Error fetching routes from OSM API:', error.response ? error.response.data : error.message);
     throw new Error('Error fetching routes from OSM API');
   }
 }
