@@ -102,4 +102,4 @@ y_test_classes = tf.argmax(y_test, axis=1)
 # Print classification report
 print(classification_report(y_test_classes, y_pred_classes))
 # Save the entire model as a SavedModel
-model.save('./model.keras')  # Replace 'path_to_save_model' with your desired directory
+  # Replace 'path_to_save_model' with your desired directory

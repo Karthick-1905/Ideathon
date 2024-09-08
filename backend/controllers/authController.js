@@ -15,8 +15,8 @@ const register = async(req,res) =>{
     res.status(StatusCodes.OK).json({success:true,user})
 }
 const login = async(req,res) =>{
-    const {username,password} = req.body
-    const user = await User.findOne({username})
+    const {email,password} = req.body
+    const user = await User.findOne({email})
     if(!user){
         throw new BadRequestError("Invalid crentials")
     }

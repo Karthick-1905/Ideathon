@@ -1,7 +1,7 @@
 import { FaHome } from "react-icons/fa"
 
 
-const SideBarButtons = [
+export const SideBarButtons = [
     {
         button:"Home",
         element:<FaHome/>,
@@ -9,5 +9,3 @@ const SideBarButtons = [
     },
 ]
 
-
-export default SideBarButtons

@@ -35,9 +35,8 @@ const validateRegisterInput = withValidationResult([
 
 
 const validateLoginInput = withValidationResult([
-    body('username')
-      .notEmpty()
-      .withMessage('username is required'),
+    body('email').notEmpty().withMessage('email is required').
+    isEmail().withMessage("Provide a valid email"),
     body('password').notEmpty().withMessage('password is required'),
   ])
 
