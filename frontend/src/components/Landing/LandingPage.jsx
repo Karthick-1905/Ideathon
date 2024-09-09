@@ -23,7 +23,7 @@ const LandingPage = () => {
         <h1>Welcome to SafeStrides</h1>
         <p className="text1">Your go-to platform for crime data and safety insights.</p>
         <p className="text2">Explore our interactive maps and stay informed to make safer decisions.</p>
-        <a href="map.html" className="start-btn">Let's Get Started</a>
+        <Link to="/maps" className="start-btn">Let's Get Started</Link>
       </div>
 
       {/* Modal */}
