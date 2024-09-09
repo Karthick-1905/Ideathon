@@ -64,7 +64,7 @@ const SearchBar = ({ onChange: setQuery, onSubmit, query }) => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="flex flex-row space-x-2">
+      <div className="flex flex-col gap-3 space-x-2">
         {/* Start Input */}
         <input
           type="text"
@@ -82,6 +82,7 @@ const SearchBar = ({ onChange: setQuery, onSubmit, query }) => {
           placeholder="Search destination"
           className="input input-bordered w-full max-w-xs"
           value={query.endQuery}
+          style={{margin:0}}
           onChange={handleInputChange}
         />
         
@@ -128,5 +129,62 @@ const SearchBar = ({ onChange: setQuery, onSubmit, query }) => {
     </div>
   );
 };
+
+
+const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100vh',
+    padding: '20px',
+    boxSizing: 'border-box'
+  },
+  mapContainer: {
+    width: '70%',
+    height: '80%',
+    borderRadius: '15px',
+    overflow: 'hidden',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#fff',
+  },
+  searchContainer: {
+    width: '25%',
+    height:'80%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    padding:'2rem'
+  },
+  inputBox: {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '5px',
+    border: '1px solid #ddd',
+    boxSizing: 'border-box'
+  },
+  searchButton: {
+    width: '100%',
+    padding: '10px',
+    backgroundColor: '#007bff', // Adjust color to match the previous UI
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+    boxSizing: 'border-box'
+  },
+  searchInputs:{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
+  recentSearchs:{
+
+  }
+
+};
+
 
 export default SearchBar;

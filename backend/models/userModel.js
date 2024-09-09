@@ -26,7 +26,14 @@ const UserSchema = new mongoose.Schema({
     },
     secondaryPhoneNo: {
         type:Number
-    }
+    },
+    recentSearchs:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Search",
+            required:true
+        }
+    ]
 },{timestamps:true})
 
 

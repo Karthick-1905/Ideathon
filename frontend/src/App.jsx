@@ -6,7 +6,7 @@ import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import {useQuery} from 'react-query'
 import axios from 'axios'
-
+import LandingPage from './components/Landing/LandingPage'
 
 function App() {
   const {data:authUser,isLoading} = useQuery({
@@ -22,9 +22,10 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<MainLayout authUser={authUser}/>}>
-        <Route index element={!authUser ?  <Login/> : <Navigate to='/maps'/>}/>
-        <Route path='register' element={!authUser ? <Register/>: <Navigate to='/maps'/>}/>
-        <Route path='maps' element={<MapLayout/>}></Route>
+        <Route index element={<LandingPage/>}/>
+        <Route path='login' element={<Login/>}/>
+        <Route path='register' element={<Register/>}></Route>
+        <Route path='maps' element={<MapLayout/>}/>
       </Route>
     )
   )
